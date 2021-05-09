@@ -12,7 +12,7 @@
         {{ currentDate }}
       </div>
     </div>
-    <!-- <MedicineCart msg="Medicine expiry date tracker" /> -->
+    <MedicineCart />
   </div>
 </template>
 
