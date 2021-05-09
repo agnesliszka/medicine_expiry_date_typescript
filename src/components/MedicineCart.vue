@@ -1,11 +1,6 @@
 <template>
   <div class="medicineCart">
-    <el-form
-      label-position="top"
-      :inline="true"
-      :model="formInline"
-      class="form"
-    >
+    <el-form label-position="top" :inline="true" class="form">
       <el-form-item>
         <el-input
           v-model="medicineNameInput"
@@ -14,12 +9,18 @@
       </el-form-item>
       <el-form-item>
         <div class="block">
-          <el-date-picker v-model="date" type="date" placeholder="Pick a day">
+          <el-date-picker
+            v-model="expiryDate"
+            type="date"
+            placeholder="Pick a day"
+          >
           </el-date-picker>
         </div>
       </el-form-item>
       <el-form-item class="button">
-        <el-button type="warning" @click="onSubmit">Add a medicine</el-button>
+        <el-button type="warning" @click="addMedicine"
+          >Add a medicine</el-button
+        >
       </el-form-item>
     </el-form>
   </div>
@@ -33,10 +34,32 @@ export default class MedicineCart extends Vue {
   // @Prop() private msg!: string;
 
   medicineNameInput = "";
-  date = "";
+  expiryDate = "";
+  medicineList: {
+    name: string;
+    date: string;
+    expired: boolean;
+  }[] = [];
 
-  onSubmit() {
+  isMedicineExpired(expiryDate: string) {
+    let today = new Date().setHours(0, 0, 0, 0);
+    let medicineExpiryDate = new Date(expiryDate).setHours(0, 0, 0, 0);
+    if (medicineExpiryDate < today) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  addMedicine() {
+    this.medicineList.push({
+      name: this.medicineNameInput,
+      date: this.expiryDate,
+      expired: this.isMedicineExpired(this.expiryDate),
+    });
+
     console.log("submit!");
+    console.log(this.medicineList);
   }
 }
 </script>
