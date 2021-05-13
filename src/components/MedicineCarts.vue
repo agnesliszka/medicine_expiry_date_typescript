@@ -112,10 +112,6 @@ export default class MedicineCarts extends Vue {
         expiryDate: moment(this.ruleForm.expiryDate).format("DD-MM-YYYY"),
         expired: this.isMedicineExpired(this.ruleForm.expiryDate),
       });
-      console.log("submit!");
-      console.log(this.medicineList);
-    } else {
-      console.log("error submit!!");
     }
   }
 }
