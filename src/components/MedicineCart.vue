@@ -30,11 +30,32 @@
         >
       </el-form-item>
     </el-form>
+
+    <el-card class="cardsContainer" v-if="medicineList.length > 0">
+      <div slot="header" class="clearfix">
+        <span>Medicine list</span>
+      </div>
+      <div v-for="(medicine, index) in medicineList" :key="index">
+        <div
+          class="cart"
+          :class="{ expired: isMedicineExpired(medicine.expiryDate) }"
+        >
+          <div>{{ medicine.expiryDate }}</div>
+          <div>{{ medicine.medicineName }}</div>
+          <span
+            @click="deleteMedicine(medicine)"
+            class="offset-sm-1 col-sm-2 delete text-right"
+            >X</span
+          >
+        </div>
+      </div>
+    </el-card>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import moment from "moment";
 
 @Component
 export default class MedicineCart extends Vue {
@@ -74,8 +95,8 @@ export default class MedicineCart extends Vue {
   };
 
   isMedicineExpired(expiryDate: string) {
-    let today = new Date().setHours(0, 0, 0, 0);
-    let medicineExpiryDate = new Date(expiryDate).setHours(0, 0, 0, 0);
+    let today = moment(new Date()).format("DD-MM-YYYY");
+    let medicineExpiryDate = expiryDate;
     if (medicineExpiryDate < today) {
       return true;
     } else {
@@ -88,7 +109,7 @@ export default class MedicineCart extends Vue {
     if (formName.validate) {
       this.medicineList.push({
         medicineName: this.ruleForm.medicineName,
-        expiryDate: this.ruleForm.expiryDate,
+        expiryDate: moment(this.ruleForm.expiryDate).format("DD-MM-YYYY"),
         expired: this.isMedicineExpired(this.ruleForm.expiryDate),
       });
       console.log("submit!");
@@ -106,5 +127,47 @@ export default class MedicineCart extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.text {
+  font-size: 14px;
+}
+
+.item {
+  margin-bottom: 18px;
+}
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix:after {
+  clear: both;
+}
+
+.box-card {
+  width: 480px;
+}
+
+.cardsContainer {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.cart {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: lightgray;
+  margin-bottom: 10px;
+  padding: 3px;
+  border-radius: 5px;
+}
+
+.expired {
+  background-color: red;
+  padding: 3px;
+  border-radius: 5px;
 }
 </style>
