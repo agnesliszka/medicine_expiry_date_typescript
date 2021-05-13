@@ -12,18 +12,18 @@
         {{ currentDate }}
       </div>
     </div>
-    <MedicineCart />
+    <MedicineCarts />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import MedicineCart from "./components/MedicineCart.vue";
+import MedicineCarts from "./components/MedicineCarts.vue";
 import moment from "moment";
 
 @Component({
   components: {
-    MedicineCart,
+    MedicineCarts,
   },
 })
 export default class App extends Vue {

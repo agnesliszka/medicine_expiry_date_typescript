@@ -33,7 +33,7 @@
 
     <el-card class="cardsContainer" v-if="medicineList.length > 0">
       <div slot="header" class="clearfix">
-        <span>Medicine list</span>
+        <span class="title">Medicine list</span>
       </div>
       <div v-for="(medicine, index) in medicineList" :key="index">
         <div
@@ -55,7 +55,7 @@ import moment from "moment";
 
 @Component
 export default class MedicineCart extends Vue {
-  // @Prop() private msg!: string;
+  // @Prop() baseColor!: string;
 
   ruleForm: { medicineName: string; expiryDate: string } = {
     medicineName: "",
@@ -152,6 +152,11 @@ export default class MedicineCart extends Vue {
 
 .box-card {
   width: 480px;
+}
+
+.title {
+  font-family: Goudy Old Style;
+  font-size: 20px;
 }
 
 .cardsContainer {
