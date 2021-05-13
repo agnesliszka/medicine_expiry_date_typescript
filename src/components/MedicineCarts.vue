@@ -27,7 +27,7 @@
       <el-form-item class="button">
         <el-button
           type="warning"
-          :disabled="ruleForm.medicineName === '' || ruleForm.expiryDate === ''"
+          :disabled="addButtonDisabled"
           @click="addMedicine()"
           >Add a medicine</el-button
         >
@@ -92,6 +92,14 @@ export default class MedicineCart extends Vue {
       },
     ],
   };
+
+  get addButtonDisabled() {
+    if (this.ruleForm.medicineName === "" || this.ruleForm.expiryDate === "") {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   isMedicineExpired(expiryDate: string): boolean {
     let today = moment(new Date()).format("DD-MM-YYYY");
