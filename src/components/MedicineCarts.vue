@@ -25,7 +25,10 @@
         </div>
       </el-form-item>
       <el-form-item class="button">
-        <el-button type="warning" @click="addMedicine()"
+        <el-button
+          type="warning"
+          :disabled="ruleForm.medicineName === '' || ruleForm.expiryDate === ''"
+          @click="addMedicine()"
           >Add a medicine</el-button
         >
       </el-form-item>
