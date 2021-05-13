@@ -42,11 +42,7 @@
         >
           <div>{{ medicine.expiryDate }}</div>
           <div>{{ medicine.medicineName }}</div>
-          <span
-            @click="deleteMedicine(medicine)"
-            class="offset-sm-1 col-sm-2 delete text-right"
-            >X</span
-          >
+          <span @click="deleteMedicine(medicine)" class="delete">X</span>
         </div>
       </div>
     </el-card>
@@ -94,7 +90,7 @@ export default class MedicineCart extends Vue {
     ],
   };
 
-  isMedicineExpired(expiryDate: string) {
+  isMedicineExpired(expiryDate: string): boolean {
     let today = moment(new Date()).format("DD-MM-YYYY");
     let medicineExpiryDate = expiryDate;
     if (medicineExpiryDate < today) {
@@ -104,7 +100,7 @@ export default class MedicineCart extends Vue {
     }
   }
 
-  addMedicine() {
+  addMedicine(): void {
     let formName: any = this.$refs.ruleForm;
     if (formName.validate) {
       this.medicineList.push({
@@ -116,8 +112,16 @@ export default class MedicineCart extends Vue {
       console.log(this.medicineList);
     } else {
       console.log("error submit!!");
-      return false;
     }
+  }
+
+  deleteMedicine(medicine: {
+    medicineName: string;
+    expiryDate: string;
+    expired: boolean;
+  }) {
+    const index = this.medicineList.indexOf(medicine);
+    this.medicineList.splice(index, 1);
   }
 }
 </script>
@@ -169,5 +173,13 @@ export default class MedicineCart extends Vue {
   background-color: red;
   padding: 3px;
   border-radius: 5px;
+}
+
+.delete {
+  cursor: pointer;
+}
+
+.delete:hover {
+  color: #999999;
 }
 </style>
