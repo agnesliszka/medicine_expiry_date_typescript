@@ -17,8 +17,8 @@
       <el-button
         type="danger"
         v-show="medicineList.length > 0"
-        @click="showExpiredMedicineOnly"
-        >Show expired medicine only</el-button
+        @click="showExpiredMedicine"
+        >{{ buttonText }}</el-button
       >
     </div>
 
@@ -82,6 +82,17 @@
     >
       <MedicineCart
         :medicineList="filterResults()"
+        :isMedicineExpired="isMedicineExpired"
+      />
+    </section>
+
+    <section
+      style="margin-top: 20px"
+      class="container"
+      v-if="showExpiredMedicineOnly"
+    >
+      <MedicineCart
+        :medicineList="expiredMedicineList()"
         :isMedicineExpired="isMedicineExpired"
       />
     </section>
@@ -158,12 +169,21 @@ export default class MedicineCarts extends Vue {
       : "Sort by date descendingly";
   }
 
+  get buttonText() {
+    return this.showExpiredMedicineOnly
+      ? "Show all medicines"
+      : "Show expired medicine only";
+  }
+
   isMedicineExpired(expiryDate: string): boolean {
     let today = moment(new Date()).format("DD-MM-YYYY");
-    let medicineExpiryDate = expiryDate;
+    let medicineExpiryDate = moment(new Date(expiryDate)).format("DD-MM-YYYY");
+
     if (medicineExpiryDate < today) {
+      console.log(true);
       return true;
     } else {
+      console.log(false);
       return false;
     }
   }
@@ -281,9 +301,16 @@ export default class MedicineCarts extends Vue {
     return this.medicineList.sort(compare);
   }
 
-  // showExpiredMedicineOnly(): void {
-  //   this.showExpiredMedicineOnly = !this.showExpiredMedicineOnly;
-  // }
+  showExpiredMedicine(): void {
+    this.isActive = false;
+    this.showExpiredMedicineOnly = !this.showExpiredMedicineOnly;
+  }
+
+  expiredMedicineList(): any {
+    return this.medicineList.filter(function (medicine) {
+      return medicine.expired;
+    });
+  }
 
   filterResults(): any {
     this.isActive = false;
