@@ -1,5 +1,18 @@
 <template>
   <div class="medicineCart">
+    <div class="filters">
+      <el-button
+        type="danger"
+        @click="showMedicineList"
+        v-show="medicineList.length > 0"
+        ><span v-if="isActive">Hide Medicine List</span>
+        <span v-if="!isActive">Show Medicine List</span></el-button
+      >
+      <el-button type="info">Sort by name ascendingly</el-button>
+      <el-button type="info">Sort by date ascendingly</el-button>
+      <el-button type="danger">Show expired medicine only</el-button>
+    </div>
+
     <el-form
       label-position="top"
       :model="ruleForm"
@@ -34,6 +47,7 @@
       </el-form-item>
     </el-form>
     <MedicineCart
+      v-if="isActive"
       :medicineList="medicineList"
       :isMedicineExpired="isMedicineExpired"
     />
@@ -51,8 +65,7 @@ import MedicineCart from "./MedicineCart.vue";
   },
 })
 export default class MedicineCarts extends Vue {
-  // @Prop() baseColor!: string;
-
+  isActive = false;
   ruleForm: { medicineName: string; expiryDate: string } = {
     medicineName: "",
     expiryDate: "",
@@ -114,6 +127,10 @@ export default class MedicineCarts extends Vue {
       });
     }
   }
+
+  showMedicineList(): void {
+    this.isActive = !this.isActive;
+  }
 }
 </script>
 
@@ -122,5 +139,9 @@ export default class MedicineCarts extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.filters {
+  margin-bottom: 20px;
 }
 </style>
