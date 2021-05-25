@@ -69,11 +69,12 @@
       </el-date-picker>
     </div>
 
-    <MedicineCart
-      v-if="isActive"
-      :medicineList="medicineList"
-      :isMedicineExpired="isMedicineExpired"
-    />
+    <section style="margin-top: 20px" v-if="isActive">
+      <MedicineCart
+        :medicineList="medicineList"
+        :isMedicineExpired="isMedicineExpired"
+      />
+    </section>
 
     <section
       style="margin-top: 20px"
@@ -180,10 +181,8 @@ export default class MedicineCarts extends Vue {
     let medicineExpiryDate = moment(new Date(expiryDate)).format("DD-MM-YYYY");
 
     if (medicineExpiryDate < today) {
-      console.log(true);
       return true;
     } else {
-      console.log(false);
       return false;
     }
   }
@@ -201,6 +200,8 @@ export default class MedicineCarts extends Vue {
 
   showMedicineList(): void {
     this.isActive = !this.isActive;
+    this.showExpiredMedicineOnly = false;
+    this.filteredDataShown = false;
   }
 
   changeSortedByNameFlag(): void {
@@ -317,9 +318,7 @@ export default class MedicineCarts extends Vue {
     this.filteredDataShown = true;
 
     const beginningDate: Date = this.dateRange[0];
-    console.log(beginningDate);
     const endDate: Date = this.dateRange[1];
-    console.log(endDate);
     const filteredElements: [] = [];
     this.medicineList.forEach((medicine) => {
       if (
