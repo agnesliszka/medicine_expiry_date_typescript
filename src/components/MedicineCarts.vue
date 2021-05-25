@@ -14,7 +14,12 @@
       <el-button type="info" @click="changeSortedByDateFlag">{{
         timeButtonText
       }}</el-button>
-      <el-button type="danger">Show expired medicine only</el-button>
+      <el-button
+        type="danger"
+        v-show="medicineList.length > 0"
+        @click="showExpiredMedicineOnly"
+        >Show expired medicine only</el-button
+      >
     </div>
 
     <el-form
@@ -50,11 +55,36 @@
         >
       </el-form-item>
     </el-form>
+
+    <div class="block">
+      <div style="color: white; margin-top: 20px">Select date range:</div>
+      <el-date-picker
+        @change="filterResults"
+        v-model="dateRange"
+        type="daterange"
+        range-separator="To"
+        start-placeholder="Start date"
+        end-placeholder="End date"
+      >
+      </el-date-picker>
+    </div>
+
     <MedicineCart
       v-if="isActive"
       :medicineList="medicineList"
       :isMedicineExpired="isMedicineExpired"
     />
+
+    <section
+      style="margin-top: 20px"
+      class="container"
+      v-if="filteredDataShown"
+    >
+      <MedicineCart
+        :medicineList="filterResults()"
+        :isMedicineExpired="isMedicineExpired"
+      />
+    </section>
   </div>
 </template>
 
@@ -70,8 +100,11 @@ import MedicineCart from "./MedicineCart.vue";
 })
 export default class MedicineCarts extends Vue {
   isActive = false;
+  filteredDataShown = false;
+  dateRange = [];
   sortedByNameAscendigly = true;
   sortedByDateAscendigly = true;
+  showExpiredMedicineOnly = false;
   ruleForm: { medicineName: string; expiryDate: string } = {
     medicineName: "",
     expiryDate: "",
@@ -246,6 +279,31 @@ export default class MedicineCarts extends Vue {
       return 0;
     }
     return this.medicineList.sort(compare);
+  }
+
+  // showExpiredMedicineOnly(): void {
+  //   this.showExpiredMedicineOnly = !this.showExpiredMedicineOnly;
+  // }
+
+  filterResults(): any {
+    this.isActive = false;
+    this.filteredDataShown = true;
+
+    const beginningDate: Date = this.dateRange[0];
+    console.log(beginningDate);
+    const endDate: Date = this.dateRange[1];
+    console.log(endDate);
+    const filteredElements: [] = [];
+    this.medicineList.forEach((medicine) => {
+      if (
+        new Date(moment(medicine.expiryDate).format("DD-MM-YYYY")) >
+          beginningDate &&
+        new Date(moment(medicine.expiryDate).format("DD-MM-YYYY")) < endDate
+      ) {
+        filteredElements.push(medicine);
+      }
+    });
+    return filteredElements;
   }
 }
 </script>
