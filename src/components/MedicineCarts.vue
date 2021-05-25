@@ -8,8 +8,12 @@
         ><span v-if="isActive">Hide Medicine List</span>
         <span v-if="!isActive">Show Medicine List</span></el-button
       >
-      <el-button type="info">Sort by name ascendingly</el-button>
-      <el-button type="info">Sort by date ascendingly</el-button>
+      <el-button type="info" @click="changeSortedByNameFlag">{{
+        nameButtonText
+      }}</el-button>
+      <el-button type="info" @click="changeSortedByDateFlag">{{
+        timeButtonText
+      }}</el-button>
       <el-button type="danger">Show expired medicine only</el-button>
     </div>
 
@@ -66,6 +70,8 @@ import MedicineCart from "./MedicineCart.vue";
 })
 export default class MedicineCarts extends Vue {
   isActive = false;
+  sortedByNameAscendigly = true;
+  sortedByDateAscendigly = true;
   ruleForm: { medicineName: string; expiryDate: string } = {
     medicineName: "",
     expiryDate: "",
@@ -107,6 +113,18 @@ export default class MedicineCarts extends Vue {
     }
   }
 
+  get nameButtonText() {
+    return this.sortedByNameAscendigly
+      ? "Sort by name ascendingly"
+      : "Sort by name descendingly";
+  }
+
+  get timeButtonText() {
+    return this.sortedByDateAscendigly
+      ? "Sort by date ascendingly"
+      : "Sort by date descendingly";
+  }
+
   isMedicineExpired(expiryDate: string): boolean {
     let today = moment(new Date()).format("DD-MM-YYYY");
     let medicineExpiryDate = expiryDate;
@@ -130,6 +148,104 @@ export default class MedicineCarts extends Vue {
 
   showMedicineList(): void {
     this.isActive = !this.isActive;
+  }
+
+  changeSortedByNameFlag(): void {
+    if (this.sortedByNameAscendigly) {
+      this.sortMedicineListByNameAscendingly();
+    } else if (!this.sortedByNameAscendigly) {
+      this.sortMedicineListByNameDescendingly();
+    }
+    this.sortedByNameAscendigly = !this.sortedByNameAscendigly;
+  }
+
+  changeSortedByDateFlag() {
+    if (this.sortedByDateAscendigly) {
+      this.sortMedicineListByDateAscendingly();
+    } else if (!this.sortedByDateAscendigly) {
+      this.sortMedicineListByDateDescendingly();
+    }
+    this.sortedByDateAscendigly = !this.sortedByDateAscendigly;
+  }
+
+  sortMedicineListByNameAscendingly(): any {
+    function compare(
+      a: {
+        medicineName: string;
+        expiryDate: string;
+        expired: boolean;
+      },
+      b: {
+        medicineName: string;
+        expiryDate: string;
+        expired: boolean;
+      }
+    ) {
+      if (a.medicineName < b.medicineName) return -1;
+      if (a.medicineName > b.medicineName) return 1;
+      return 0;
+    }
+    return this.medicineList.sort(compare);
+  }
+
+  sortMedicineListByNameDescendingly(): any {
+    function compare(
+      a: {
+        medicineName: string;
+        expiryDate: string;
+        expired: boolean;
+      },
+      b: {
+        medicineName: string;
+        expiryDate: string;
+        expired: boolean;
+      }
+    ) {
+      if (a.medicineName < b.medicineName) return 1;
+      if (a.medicineName > b.medicineName) return -1;
+      return 0;
+    }
+    return this.medicineList.sort(compare);
+  }
+
+  sortMedicineListByDateAscendingly(): any {
+    function compare(
+      a: {
+        medicineName: string;
+        expiryDate: string;
+        expired: boolean;
+      },
+      b: {
+        medicineName: string;
+        expiryDate: string;
+        expired: boolean;
+      }
+    ) {
+      if (a.expiryDate < b.expiryDate) return -1;
+      if (a.expiryDate > b.expiryDate) return 1;
+      return 0;
+    }
+    return this.medicineList.sort(compare);
+  }
+
+  sortMedicineListByDateDescendingly(): any {
+    function compare(
+      a: {
+        medicineName: string;
+        expiryDate: string;
+        expired: boolean;
+      },
+      b: {
+        medicineName: string;
+        expiryDate: string;
+        expired: boolean;
+      }
+    ) {
+      if (a.expiryDate < b.expiryDate) return 1;
+      if (a.expiryDate > b.expiryDate) return -1;
+      return 0;
+    }
+    return this.medicineList.sort(compare);
   }
 }
 </script>
