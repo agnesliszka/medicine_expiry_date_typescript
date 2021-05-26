@@ -104,6 +104,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import moment from "moment";
 import MedicineCart from "./MedicineCart.vue";
+import MedicineModel from "../models/MedicineModel";
 
 @Component({
   components: {
@@ -122,11 +123,11 @@ export default class MedicineCarts extends Vue {
     expiryDate: "",
   };
 
-  medicineList: {
-    medicineName: string;
-    expiryDate: string;
-    expired: boolean;
-  }[] = [];
+  // medicineList: {
+  //   medicineName: string;
+  //   expiryDate: string;
+  //   expired: boolean;
+  // }[] = [];
 
   formRules = {
     medicineName: [
@@ -176,6 +177,11 @@ export default class MedicineCarts extends Vue {
       : "Show expired medicine only";
   }
 
+  get medicineList(): MedicineModel[] {
+    let medicineList = this.$store.state.medicineList;
+    return medicineList;
+  }
+
   isMedicineExpired(expiryDate: string): boolean {
     let today = moment(new Date()).format("YYYY-MM-DD");
     let medicineExpiryDate = moment(new Date(expiryDate)).format("YYYY-MM-DD");
@@ -190,11 +196,18 @@ export default class MedicineCarts extends Vue {
   addMedicine(): void {
     let formName: any = this.$refs.ruleForm;
     if (formName.validate) {
-      this.medicineList.push({
-        medicineName: this.ruleForm.medicineName,
-        expiryDate: moment(this.ruleForm.expiryDate).format("YYYY-MM-DD"),
-        expired: this.isMedicineExpired(this.ruleForm.expiryDate),
-      });
+      this.$store
+        .dispatch("addMedicine", {
+          medicineName: this.ruleForm.medicineName,
+          expiryDate: moment(this.ruleForm.expiryDate).format("YYYY-MM-DD"),
+          expired: this.isMedicineExpired(this.ruleForm.expiryDate),
+        })
+        .then(() => {
+          console.log("medicine added");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   }
 
