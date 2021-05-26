@@ -177,8 +177,8 @@ export default class MedicineCarts extends Vue {
   }
 
   isMedicineExpired(expiryDate: string): boolean {
-    let today = moment(new Date()).format("DD-MM-YYYY");
-    let medicineExpiryDate = moment(new Date(expiryDate)).format("DD-MM-YYYY");
+    let today = moment(new Date()).format("YYYY-MM-DD");
+    let medicineExpiryDate = moment(new Date(expiryDate)).format("YYYY-MM-DD");
 
     if (medicineExpiryDate < today) {
       return true;
@@ -192,7 +192,7 @@ export default class MedicineCarts extends Vue {
     if (formName.validate) {
       this.medicineList.push({
         medicineName: this.ruleForm.medicineName,
-        expiryDate: moment(this.ruleForm.expiryDate).format("DD-MM-YYYY"),
+        expiryDate: moment(this.ruleForm.expiryDate).format("YYYY-MM-DD"),
         expired: this.isMedicineExpired(this.ruleForm.expiryDate),
       });
     }
@@ -322,9 +322,9 @@ export default class MedicineCarts extends Vue {
     const filteredElements: [] = [];
     this.medicineList.forEach((medicine) => {
       if (
-        new Date(moment(medicine.expiryDate).format("DD-MM-YYYY")) >
+        new Date(moment(medicine.expiryDate).format("YYYY-MM-DD")) >
           beginningDate &&
-        new Date(moment(medicine.expiryDate).format("DD-MM-YYYY")) < endDate
+        new Date(moment(medicine.expiryDate).format("YYYY-MM-DD")) < endDate
       ) {
         filteredElements.push(medicine);
       }
