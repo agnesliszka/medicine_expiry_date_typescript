@@ -123,12 +123,6 @@ export default class MedicineCarts extends Vue {
     expiryDate: "",
   };
 
-  // medicineList: {
-  //   medicineName: string;
-  //   expiryDate: string;
-  //   expired: boolean;
-  // }[] = [];
-
   formRules = {
     medicineName: [
       {
