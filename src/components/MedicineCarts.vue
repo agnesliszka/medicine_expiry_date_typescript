@@ -317,7 +317,11 @@ export default class MedicineCarts extends Vue {
 
   showExpiredMedicine(): void {
     this.isActive = false;
+
     this.showExpiredMedicineOnly = !this.showExpiredMedicineOnly;
+    if (this.showExpiredMedicineOnly === false) {
+      this.isActive = true;
+    }
   }
 
   expiredMedicineList(): any {
